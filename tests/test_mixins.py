@@ -1,3 +1,4 @@
+from django.shortcuts import reverse
 from django.test import TestCase
 from django.test.client import Client
 
@@ -15,6 +16,7 @@ class JSONWebTokenAuthMixinTestCase(TestCase):
         self.data = {"username": self.username, "password": self.password}
 
         self.client = Client()
+        self.mock_jwt_url = reverse("mock_jwt")
 
     def test_post_json_passing_jwt_auth(self):
         """
@@ -26,7 +28,7 @@ class JSONWebTokenAuthMixinTestCase(TestCase):
 
         auth = "Bearer {0}".format(token)
         response = self.client.post(
-            "/jwt/", content_type="application/json", HTTP_AUTHORIZATION=auth
+            self.mock_jwt_url, content_type="application/json", HTTP_AUTHORIZATION=auth
         )
 
         response_content = json.loads(smart_text(response.content))
@@ -38,7 +40,7 @@ class JSONWebTokenAuthMixinTestCase(TestCase):
         """
         Ensure POSTing json over JWT auth without correct credentials fails
         """
-        response = self.client.post("/jwt/", content_type="application/json")
+        response = self.client.post(self.mock_jwt_url, content_type="application/json")
 
         response_content = json.loads(smart_text(response.content))
 
@@ -54,7 +56,7 @@ class JSONWebTokenAuthMixinTestCase(TestCase):
         """
         auth = "Bearer"
         response = self.client.post(
-            "/jwt/", content_type="application/json", HTTP_AUTHORIZATION=auth
+            self.mock_jwt_url, content_type="application/json", HTTP_AUTHORIZATION=auth
         )
 
         response_content = json.loads(smart_text(response.content))
@@ -71,7 +73,7 @@ class JSONWebTokenAuthMixinTestCase(TestCase):
         """
         auth = "Bearer abc abc"
         response = self.client.post(
-            "/jwt/", content_type="application/json", HTTP_AUTHORIZATION=auth
+            self.mock_jwt_url, content_type="application/json", HTTP_AUTHORIZATION=auth
         )
 
         response_content = json.loads(smart_text(response.content))
@@ -94,7 +96,7 @@ class JSONWebTokenAuthMixinTestCase(TestCase):
 
         auth = "Bearer {0}".format(token)
         response = self.client.post(
-            "/jwt/", content_type="application/json", HTTP_AUTHORIZATION=auth
+            self.mock_jwt_url, content_type="application/json", HTTP_AUTHORIZATION=auth
         )
 
         response_content = json.loads(smart_text(response.content))
@@ -111,7 +113,7 @@ class JSONWebTokenAuthMixinTestCase(TestCase):
         """
         auth = "Bearer abc123"
         response = self.client.post(
-            "/jwt/", content_type="application/json", HTTP_AUTHORIZATION=auth
+            self.mock_jwt_url, content_type="application/json", HTTP_AUTHORIZATION=auth
         )
 
         response_content = json.loads(smart_text(response.content))
