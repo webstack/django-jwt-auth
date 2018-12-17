@@ -1,4 +1,3 @@
-import pytest
 from django.test import TestCase
 from django.test.client import Client
 
@@ -6,7 +5,6 @@ from jwt_auth import utils
 from jwt_auth.compat import User, json, smart_text
 
 
-@pytest.mark.django_db
 class JSONWebTokenAuthMixinTestCase(TestCase):
     def setUp(self):
         self.email = 'jpueblo@example.com'

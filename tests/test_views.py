@@ -1,5 +1,3 @@
-import pytest
-
 from calendar import timegm
 from datetime import datetime, timedelta
 
@@ -10,7 +8,6 @@ from jwt_auth import utils, settings
 from jwt_auth.compat import json, User, smart_text
 
 
-@pytest.mark.django_db
 class ObtainJSONWebTokenTestCase(TestCase):
     def setUp(self):
         self.email = 'jpueblo@example.com'
@@ -95,7 +92,6 @@ class ObtainJSONWebTokenTestCase(TestCase):
         self.assertEqual(decoded_payload['username'], self.username)
 
 
-@pytest.mark.django_db
 class RefreshJSONWebTokenTestCase(TestCase):
     def setUp(self):
         self.email = 'jpueblo@example.com'
