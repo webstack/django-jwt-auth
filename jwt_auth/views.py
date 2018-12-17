@@ -6,6 +6,7 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
+from jwt_auth import settings as jwt_auth_settings
 from jwt_auth.forms import JSONWebTokenForm, JSONWebTokenRefreshForm
 
 
@@ -32,7 +33,10 @@ class JSONWebTokenViewBase(View):
         if not form.is_valid():
             return self.render_bad_request_response({"errors": form.errors})
 
-        context_dict = {"token": form.object["token"]}
+        context_dict = {
+            "token": form.object["token"],
+            "expiresIn": jwt_auth_settings.JWT_EXPIRATION_DELTA.total_seconds(),
+        }
 
         return self.render_response(context_dict)
 
