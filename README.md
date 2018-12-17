@@ -24,11 +24,33 @@ In your `urls.py` add the following URL route to enable obtaining a token via a 
 ```python
 from jwt_auth import views as jwt_auth_views
 
+from your_app.views import RestrictedView
+
 urlpatterns = [
     # ...
     path("token-auth/", jwt_auth_views.obtain_jwt_token),
-    path("token-refresh/", jwt_auth_views.refresh_jwt_token)
+    path("token-refresh/", jwt_auth_views.refresh_jwt_token),
+    path("protected-url/", RestrictedView.as_view()),
 ]
+```
+
+Inside your_app, create a Django restricted view:
+
+```python
+import json
+
+from django.http import JsonResponse
+from django.views.generic import View
+from jwt_auth.mixins import JSONWebTokenAuthMixin
+
+class RestrictedView(JSONWebTokenAuthMixin, View):
+    def get(self, request):
+        data = json.dumps({
+            "foo": "bar",
+            "user_id": request.user.pk,
+            "token": request.token
+        })
+        return JsonResponse(data)
 ```
 
 You can easily test if the endpoint is working by doing the following in your terminal, if you had a user created with the username **admin** and password **abc123**.
