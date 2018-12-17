@@ -5,6 +5,6 @@ from tests.views import MockView
 
 urlpatterns = [
     path("mock-jwt/", MockView.as_view(), name="mock_jwt"),
-    path("token/", jwt_auth_views.obtain_jwt_token, name="get_token"),
-    path("refresh-token/", jwt_auth_views.refresh_jwt_token, name="refresh_token"),
+    path("token-auth/", jwt_auth_views.obtain_jwt_token, name="get_token"),
+    path("token-refresh/", jwt_auth_views.refresh_jwt_token, name="refresh_token"),
 ]
