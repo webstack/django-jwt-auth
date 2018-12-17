@@ -6,7 +6,8 @@
 ## Overview
 This package provides [JSON Web Token Authentication](http://tools.ietf.org/html/draft-ietf-oauth-json-web-token) support for Django.
 
-Based on the [Django REST Framework JWT Auth](https://github.com/GetBlimp/django-rest-framework-jwt) package.
+Based on the [Django REST Framework JWT Auth](https://github.com/GetBlimp/django-rest-framework-jwt) package and forked from (https://github.com/jpadilla/django-jwt-auth) to merge
+refresh view and few improvements.
 
 ## Installation
 
@@ -21,12 +22,13 @@ $ pip install django-jwt-auth
 In your `urls.py` add the following URL route to enable obtaining a token via a POST included the user's username and password.
 
 ```python
-urlpatterns = patterns(
-    '',
-    # ...
+from jwt_auth import views as jwt_auth_views
 
-    url(r'^api-token-auth/', 'jwt_auth.views.obtain_jwt_token'),
-)
+urlpatterns = [
+    # ...
+    path("auth-token/", jwt_auth_views.obtain_jwt_token),
+    path("refresh-token/", jwt_auth_views.refresh_jwt_token)
+]
 ```
 
 You can easily test if the endpoint is working by doing the following in your terminal, if you had a user created with the username **admin** and password **abc123**.
