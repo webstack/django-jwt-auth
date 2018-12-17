@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext as _
 from jwt_auth import settings
-from jwt_auth.compat import User
+from jwt_auth.core import User
 from jwt_auth.utils import jwt_get_user_id_from_payload_handler
 
 jwt_payload_handler = settings.JWT_PAYLOAD_HANDLER

@@ -1,10 +1,11 @@
+import json
 import jwt
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 from jwt_auth import exceptions, settings
-from jwt_auth.compat import User, json, smart_text
+from jwt_auth.core import User
 from jwt_auth.utils import get_authorization_header
 
 jwt_decode_handler = settings.JWT_DECODE_HANDLER
@@ -45,7 +46,7 @@ class JSONWebTokenAuthMixin(object):
         auth = get_authorization_header(request).split()
         auth_header_prefix = settings.JWT_AUTH_HEADER_PREFIX.lower()
 
-        if not auth or smart_text(auth[0].lower()) != auth_header_prefix:
+        if not auth or auth[0].lower().decode("utf-8") != auth_header_prefix:
             raise exceptions.AuthenticationFailed()
 
         if len(auth) == 1:

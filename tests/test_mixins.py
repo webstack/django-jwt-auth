@@ -1,8 +1,10 @@
+import json
+
 from django.shortcuts import reverse
 from django.test import TestCase
 from django.test.client import Client
 from jwt_auth import utils
-from jwt_auth.compat import User, json, smart_text
+from jwt_auth.core import User
 
 
 class JSONWebTokenAuthMixinTestCase(TestCase):
@@ -30,7 +32,7 @@ class JSONWebTokenAuthMixinTestCase(TestCase):
             self.mock_jwt_url, content_type="application/json", HTTP_AUTHORIZATION=auth
         )
 
-        response_content = json.loads(smart_text(response.content))
+        response_content = json.loads(response.content.decode("utf-8"))
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response_content["username"], self.username)
@@ -41,7 +43,7 @@ class JSONWebTokenAuthMixinTestCase(TestCase):
         """
         response = self.client.post(self.mock_jwt_url, content_type="application/json")
 
-        response_content = json.loads(smart_text(response.content))
+        response_content = json.loads(response.content.decode("utf-8"))
 
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response["WWW-Authenticate"], 'JWT realm="api"')
@@ -58,7 +60,7 @@ class JSONWebTokenAuthMixinTestCase(TestCase):
             self.mock_jwt_url, content_type="application/json", HTTP_AUTHORIZATION=auth
         )
 
-        response_content = json.loads(smart_text(response.content))
+        response_content = json.loads(response.content.decode("utf-8"))
 
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response["WWW-Authenticate"], 'JWT realm="api"')
@@ -75,7 +77,7 @@ class JSONWebTokenAuthMixinTestCase(TestCase):
             self.mock_jwt_url, content_type="application/json", HTTP_AUTHORIZATION=auth
         )
 
-        response_content = json.loads(smart_text(response.content))
+        response_content = json.loads(response.content.decode("utf-8"))
 
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response["WWW-Authenticate"], 'JWT realm="api"')
@@ -98,7 +100,7 @@ class JSONWebTokenAuthMixinTestCase(TestCase):
             self.mock_jwt_url, content_type="application/json", HTTP_AUTHORIZATION=auth
         )
 
-        response_content = json.loads(smart_text(response.content))
+        response_content = json.loads(response.content.decode("utf-8"))
 
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response["WWW-Authenticate"], 'JWT realm="api"')
@@ -115,7 +117,7 @@ class JSONWebTokenAuthMixinTestCase(TestCase):
             self.mock_jwt_url, content_type="application/json", HTTP_AUTHORIZATION=auth
         )
 
-        response_content = json.loads(smart_text(response.content))
+        response_content = json.loads(response.content.decode("utf-8"))
 
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response["WWW-Authenticate"], 'JWT realm="api"')

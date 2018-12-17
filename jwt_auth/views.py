@@ -1,10 +1,11 @@
+import json
+
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
-from jwt_auth.compat import json, smart_text
 from jwt_auth.forms import JSONWebTokenForm, JSONWebTokenRefreshForm
 
 
@@ -22,7 +23,7 @@ class JSONWebTokenViewBase(View):
 
     def post(self, request, *args, **kwargs):
         try:
-            request_json = json.loads(smart_text(request.body))
+            request_json = json.loads(request.body.decode("utf-8"))
         except ValueError:
             return self.render_bad_request_response()
 
