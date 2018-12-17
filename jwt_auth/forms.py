@@ -2,7 +2,7 @@ from calendar import timegm
 from datetime import datetime, timedelta
 
 from django import forms
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import authenticate
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext as _
 from jwt_auth import settings
@@ -74,9 +74,8 @@ class JSONWebTokenRefreshForm(forms.Form):
         user_id = jwt_get_user_id_from_payload_handler(old_payload)
 
         # Verify user
-
         try:
-            user = get_user_model().objects.get(id=user_id)
+            user = User.objects.get(id=user_id)
         except ObjectDoesNotExist:
             raise forms.ValidationError(_("Unable to login with provided credentials."))
 
@@ -84,13 +83,11 @@ class JSONWebTokenRefreshForm(forms.Form):
             raise forms.ValidationError(_("User account is disabled."))
 
         # Verify orig_iat
-
         orig_iat = old_payload.get("orig_iat")
         if not orig_iat:
             raise forms.ValidationError(_("orig_iat was missing from payload."))
 
         # Verify expiration
-
         refresh_limit = settings.JWT_REFRESH_EXPIRATION_DELTA
 
         if isinstance(refresh_limit, timedelta):
