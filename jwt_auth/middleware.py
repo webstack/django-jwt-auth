@@ -2,16 +2,17 @@ import json
 import jwt
 import logging
 
+from django.conf import settings
 from django.http import JsonResponse
 from django.utils.translation import ugettext as _
-from jwt_auth import settings, exceptions, mixins
+from jwt_auth import settings as jwt_auth_settings, exceptions, mixins
 from jwt_auth.core import User
 from jwt_auth.utils import get_authorization_header
 
 logger = logging.getLogger(__name__)
 
-jwt_decode_handler = settings.JWT_DECODE_HANDLER
-jwt_get_user_id_from_payload = settings.JWT_PAYLOAD_GET_USER_ID_HANDLER
+jwt_decode_handler = jwt_auth_settings.JWT_DECODE_HANDLER
+jwt_get_user_id_from_payload = jwt_auth_settings.JWT_PAYLOAD_GET_USER_ID_HANDLER
 
 
 class JWTAuthenticationMiddleware:
@@ -28,14 +29,15 @@ class JWTAuthenticationMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        try:
-            token = mixins.get_token_from_request(request)
-            payload = mixins.get_payload_from_token(token)
-            user_id = mixins.get_user_id_from_payload(payload)
-            request.user = mixins.get_user(user_id)
-            if not request.user:
-                raise exceptions.AuthenticationFailed(_("Invalid user ID."))
-        except exceptions.AuthenticationFailed as e:
-            return JsonResponse({"error": str(e)}, status=401)
+        if request.path_info != settings.LOGIN_URL:
+            try:
+                token = mixins.get_token_from_request(request)
+                payload = mixins.get_payload_from_token(token)
+                user_id = mixins.get_user_id_from_payload(payload)
+                request.user = mixins.get_user(user_id)
+                if not request.user:
+                    raise exceptions.AuthenticationFailed(_("Invalid user ID."))
+            except exceptions.AuthenticationFailed as e:
+                return JsonResponse({"error": str(e)}, status=401)
 
         return self.get_response(request)
