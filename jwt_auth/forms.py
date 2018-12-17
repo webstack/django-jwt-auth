@@ -47,8 +47,8 @@ class JSONWebTokenForm(forms.Form):
 
                 payload = jwt_payload_handler(user)
 
-                # Include original issued at time for a brand new token,
-                # to allow token refresh
+                # Include original issued at time for a brand new token, to
+                # allow token refresh
                 if settings.JWT_ALLOW_REFRESH:
                     payload["orig_iat"] = timegm(datetime.utcnow().utctimetuple())
 
@@ -100,12 +100,9 @@ class JSONWebTokenRefreshForm(forms.Form):
             raise forms.ValidationError(_("Refresh has expired."))
 
         # Re-issue new token
-
         payload = jwt_payload_handler(user)
 
         # Include original issued at time for a brand new token,
         # to allow token refresh
-        if settings.JWT_ALLOW_REFRESH:
-            payload["orig_iat"] = timegm(datetime.utcnow().utctimetuple())
-
+        payload["orig_iat"] = orig_iat
         self.object = {"token": jwt_encode_handler(payload)}
