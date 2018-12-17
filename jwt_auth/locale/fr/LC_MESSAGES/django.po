@@ -1,0 +1,73 @@
+# French translation of jwt_auth.
+# Copyright (C) 2018 Stéphane Raimbault
+# This file is distributed under the same license as the jwt_auth package.
+# Stéphane Raimbault <stephane.raimbault@webstack.fr>, 2018
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: webstack-django-jwt-auth HEAD\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-12-17 23:18+0100\n"
+"PO-Revision-Date: 2018-12-17 23:10+0100\n"
+"Last-Translator: Stéphane Raimbault <stephane.raimbault@webstack.fr>\n"
+"Language-Team: French\n"
+"Language: french\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: exceptions.py:6
+msgid "Incorrect authentication credentials."
+msgstr "Identifiants d'authentification non valides."
+
+#: forms.py:46 forms.py:83
+msgid "User account is disabled."
+msgstr "Compte utilisateur désactivé."
+
+#: forms.py:58 forms.py:80
+msgid "Unable to login with provided credentials."
+msgstr "Impossible de s'identifier avec les identifiants fournis."
+
+#: forms.py:61
+msgid "Must include 'username' and 'password'."
+msgstr "Doit inclure « username » et « password »."
+
+#: forms.py:88
+msgid "orig_iat was missing from payload."
+msgstr "orig_iat n'est pas présent dans les données utiles."
+
+#: forms.py:100
+msgid "Refresh has expired."
+msgstr "L'actualisation a expiré."
+
+#: middleware.py:39
+msgid "Invalid user ID."
+msgstr "ID utilisation non valide."
+
+#: mixins.py:24
+msgid "Invalid Authorization header. No credentials provided."
+msgstr "L'entête Authorization n'est pas valide. Aucun identifiant fourni."
+
+#: mixins.py:29
+msgid ""
+"Invalid Authorization header. Credentials string should not contain spaces."
+msgstr ""
+"L'entête Authorization n'est pas valide. La chaine d'identifiant ne doit pas "
+"contenir d'espaces."
+
+#: mixins.py:41
+msgid "Signature has expired."
+msgstr "La signature a expirée."
+
+#: mixins.py:43
+msgid "Error decoding signature."
+msgstr "Erreur de décodage de la signature."
+
+#: mixins.py:51
+msgid "Invalid payload"
+msgstr "Données utiles non valides."
+
+#: views.py:15
+msgid "Improperly formatted request"
+msgstr "Requête non correctement formée."
