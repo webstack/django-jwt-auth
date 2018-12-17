@@ -127,7 +127,7 @@ You can modify the Authorization header value prefix that is required to be sent
 Default is `Bearer`.
 
 
-[build-status-image]: https://secure.travis-ci.org/jpadilla/django-jwt-auth.svg?branch=master
-[travis]: http://travis-ci.org/jpadilla/django-jwt-auth?branch=master
+[build-status-image]: https://secure.travis-ci.org/webstack/django-jwt-auth.svg?branch=master
+[travis]: https://travis-ci.org/webstack/django-jwt-auth?branch=master
 [pypi-version]: https://img.shields.io/pypi/v/django-jwt-auth.svg
 [pypi]: https://pypi.python.org/pypi/django-jwt-auth
