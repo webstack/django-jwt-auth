@@ -20,14 +20,14 @@ class ObtainJSONWebTokenTestCase(TestCase):
         self.data = {"username": self.username, "password": self.password}
 
         self.client = Client()
-        self.token_url = reverse("get_token")
+        self.auth_token_url = reverse("auth_token")
 
     def test_jwt_login_json(self):
         """
         Ensure JWT login view using JSON POST works.
         """
         response = self.client.post(
-            self.token_url, json.dumps(self.data), content_type="application/json"
+            self.auth_token_url, json.dumps(self.data), content_type="application/json"
         )
 
         response_content = json.loads(response.content.decode("utf-8"))
@@ -45,7 +45,7 @@ class ObtainJSONWebTokenTestCase(TestCase):
         self.data["password"] = "wrong"
 
         response = self.client.post(
-            self.token_url, json.dumps(self.data), content_type="application/json"
+            self.auth_token_url, json.dumps(self.data), content_type="application/json"
         )
 
         self.assertEqual(response.status_code, 400)
@@ -55,7 +55,7 @@ class ObtainJSONWebTokenTestCase(TestCase):
         Ensure JWT login view using JSON POST fails if missing fields.
         """
         response = self.client.post(
-            self.token_url,
+            self.auth_token_url,
             json.dumps({"username": self.username}),
             content_type="application/json",
         )
@@ -73,7 +73,7 @@ class ObtainJSONWebTokenTestCase(TestCase):
         auth = "Bearer {0}".format(token)
 
         response = self.client.post(
-            self.token_url,
+            self.auth_token_url,
             json.dumps(self.data),
             content_type="application/json",
             HTTP_AUTHORIZATION=auth,
@@ -98,7 +98,7 @@ class RefreshJSONWebTokenTestCase(TestCase):
         self.payload["orig_iat"] = timegm(datetime.utcnow().utctimetuple())
 
         self.client = Client()
-        self.refresh_token_url = reverse("refresh_token")
+        self.refresh_auth_token_url = reverse("refresh_token")
 
     def test_jwt_refresh_json(self):
         """
@@ -107,7 +107,7 @@ class RefreshJSONWebTokenTestCase(TestCase):
         data = {"token": utils.jwt_encode_handler(self.payload)}
 
         response = self.client.post(
-            self.refresh_token_url, json.dumps(data), content_type="application/json"
+            self.refresh_auth_token_url, json.dumps(data), content_type="application/json"
         )
 
         response_content = json.loads(response.content.decode("utf-8"))
@@ -129,7 +129,7 @@ class RefreshJSONWebTokenTestCase(TestCase):
         data = {"token": utils.jwt_encode_handler(self.payload)}
 
         response = self.client.post(
-            self.refresh_token_url, json.dumps(data), content_type="application/json"
+            self.refresh_auth_token_url, json.dumps(data), content_type="application/json"
         )
 
         self.assertEqual(response.status_code, 400)
@@ -144,7 +144,7 @@ class RefreshJSONWebTokenTestCase(TestCase):
         data = {"token": utils.jwt_encode_handler(self.payload)}
 
         response = self.client.post(
-            self.refresh_token_url, json.dumps(data), content_type="application/json"
+            self.refresh_auth_token_url, json.dumps(data), content_type="application/json"
         )
 
         self.assertEqual(response.status_code, 400)
@@ -169,7 +169,7 @@ class RefreshJSONWebTokenTestCase(TestCase):
         data = {"token": utils.jwt_encode_handler(self.payload)}
 
         response = self.client.post(
-            self.refresh_token_url, json.dumps(data), content_type="application/json"
+            self.refresh_auth_token_url, json.dumps(data), content_type="application/json"
         )
 
         self.assertEqual(response.status_code, 400)
