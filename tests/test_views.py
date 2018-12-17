@@ -12,8 +12,8 @@ from jwt_auth.core import User
 
 class ObtainJSONWebTokenTestCase(TestCase):
     def setUp(self):
-        self.email = "jpueblo@example.com"
-        self.username = "jpueblo"
+        self.email = "foo@example.com"
+        self.username = "foo"
         self.password = "password"
         self.user = User.objects.create_user(self.username, self.email, self.password)
 
@@ -29,7 +29,6 @@ class ObtainJSONWebTokenTestCase(TestCase):
         response = self.client.post(
             self.auth_token_url, json.dumps(self.data), content_type="application/json"
         )
-
         response_content = json.loads(response.content.decode("utf-8"))
 
         decoded_payload = utils.jwt_decode_handler(response_content["token"])
@@ -78,7 +77,6 @@ class ObtainJSONWebTokenTestCase(TestCase):
             content_type="application/json",
             HTTP_AUTHORIZATION=auth,
         )
-
         response_content = json.loads(response.content.decode("utf-8"))
 
         decoded_payload = utils.jwt_decode_handler(response_content["token"])
@@ -107,9 +105,10 @@ class RefreshJSONWebTokenTestCase(TestCase):
         data = {"token": utils.jwt_encode_handler(self.payload)}
 
         response = self.client.post(
-            self.refresh_auth_token_url, json.dumps(data), content_type="application/json"
+            self.refresh_auth_token_url,
+            json.dumps(data),
+            content_type="application/json",
         )
-
         response_content = json.loads(response.content.decode("utf-8"))
 
         decoded_payload = utils.jwt_decode_handler(response_content["token"])
@@ -127,9 +126,10 @@ class RefreshJSONWebTokenTestCase(TestCase):
         self.user.save()
 
         data = {"token": utils.jwt_encode_handler(self.payload)}
-
         response = self.client.post(
-            self.refresh_auth_token_url, json.dumps(data), content_type="application/json"
+            self.refresh_auth_token_url,
+            json.dumps(data),
+            content_type="application/json",
         )
 
         self.assertEqual(response.status_code, 400)
@@ -142,9 +142,10 @@ class RefreshJSONWebTokenTestCase(TestCase):
         self.payload.pop("orig_iat")
 
         data = {"token": utils.jwt_encode_handler(self.payload)}
-
         response = self.client.post(
-            self.refresh_auth_token_url, json.dumps(data), content_type="application/json"
+            self.refresh_auth_token_url,
+            json.dumps(data),
+            content_type="application/json",
         )
 
         self.assertEqual(response.status_code, 400)
@@ -163,13 +164,12 @@ class RefreshJSONWebTokenTestCase(TestCase):
             - settings.JWT_REFRESH_EXPIRATION_DELTA
             - timedelta(days=1)
         )
-
         self.payload["orig_iat"] = timegm(orig_iat.utctimetuple())
-
         data = {"token": utils.jwt_encode_handler(self.payload)}
-
         response = self.client.post(
-            self.refresh_auth_token_url, json.dumps(data), content_type="application/json"
+            self.refresh_auth_token_url,
+            json.dumps(data),
+            content_type="application/json",
         )
 
         self.assertEqual(response.status_code, 400)

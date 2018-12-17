@@ -5,6 +5,6 @@ from django.views.generic import View
 from jwt_auth.mixins import JSONWebTokenAuthMixin
 
 
-class MockView(JSONWebTokenAuthMixin, View):
-    def post(self, request):
+class ProtectedView(JSONWebTokenAuthMixin, View):
+    def get(self, request):
         return JsonResponse({"username": request.user.username})
