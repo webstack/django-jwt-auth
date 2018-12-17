@@ -36,10 +36,9 @@ class ObtainJSONWebTokenTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(decoded_payload["username"], self.username)
 
-    def test_jwt_login_json_bad_creds(self):
+    def test_jwt_login_json_bad_credentials(self):
         """
-        Ensure JWT login view using JSON POST fails
-        if bad credentials are used.
+        Ensure JWT login view using JSON POST fails if bad credentials are used.
         """
         self.data["password"] = "wrong"
 
