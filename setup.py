@@ -12,7 +12,7 @@ if sys.argv[-1] == "publish":
 
 
 setup(
-    name="django-jwt-auth",
+    name="webstack-django-jwt-auth",
     version="0.1.0",
     url="https://github.com/webstack/django-jwt-auth",
     license="MIT",

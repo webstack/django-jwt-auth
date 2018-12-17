@@ -14,7 +14,7 @@ refresh view and few improvements.
 Install using `pip`...
 
 ```
-$ pip install django-jwt-auth
+$ pip install webstack-django-jwt-auth
 ```
 
 ## Usage
