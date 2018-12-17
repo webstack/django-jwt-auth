@@ -13,7 +13,7 @@ if sys.argv[-1] == "publish":
 
 setup(
     name="webstack-django-jwt-auth",
-    version="0.1.0",
+    version="0.2.0",
     url="https://github.com/webstack/django-jwt-auth",
     license="MIT",
     description="JSON Web Token based authentication for Django",
