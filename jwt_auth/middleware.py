@@ -2,6 +2,7 @@ import json
 import jwt
 import logging
 
+from django.http import JsonResponse
 from django.utils.translation import ugettext as _
 from jwt_auth import settings, exceptions, mixins
 from jwt_auth.core import User
@@ -23,10 +24,10 @@ class JWTAuthenticationMiddleware:
     Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdW....
     """
 
-    def __init__(self, get_response=None):
+    def __init__(self, get_response):
         self.get_response = get_response
 
-    def process_request(self, request):
+    def __call__(self, request):
         try:
             token = mixins.get_token_from_request(request)
             payload = mixins.get_payload_from_token(token)
@@ -35,7 +36,6 @@ class JWTAuthenticationMiddleware:
             if not request.user:
                 raise exceptions.AuthenticationFailed(_("Invalid user ID."))
         except exceptions.AuthenticationFailed as e:
-            logger.exception(e)
+            return JsonResponse({"error": str(e)}, status=401)
 
-    def process_response(self, request, response):
-        return response
+        return self.get_response(request)
