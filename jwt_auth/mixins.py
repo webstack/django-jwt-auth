@@ -24,7 +24,8 @@ class JSONWebTokenAuthMixin(object):
 
         Authorization: JWT eyJhbGciOiAiSFMyNTYiLCAidHlwIj
     """
-    www_authenticate_realm = 'api'
+
+    www_authenticate_realm = "api"
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -32,17 +33,16 @@ class JSONWebTokenAuthMixin(object):
             request.user, request.token = self.authenticate(request)
         except exceptions.AuthenticationFailed as e:
             response = HttpResponse(
-                json.dumps({'errors': [str(e)]}),
+                json.dumps({"errors": [str(e)]}),
                 status=401,
-                content_type='application/json'
+                content_type="application/json",
             )
 
-            response['WWW-Authenticate'] = self.authenticate_header(request)
+            response["WWW-Authenticate"] = self.authenticate_header(request)
 
             return response
 
-        return super(JSONWebTokenAuthMixin, self).dispatch(
-            request, *args, **kwargs)
+        return super(JSONWebTokenAuthMixin, self).dispatch(request, *args, **kwargs)
 
     def authenticate(self, request):
         auth = get_authorization_header(request).split()
@@ -53,20 +53,22 @@ class JSONWebTokenAuthMixin(object):
 
         if len(auth) == 1:
             raise exceptions.AuthenticationFailed(
-                _('Invalid Authorization header. No credentials provided.')
+                _("Invalid Authorization header. No credentials provided.")
             )
         elif len(auth) > 2:
             raise exceptions.AuthenticationFailed(
-                _('Invalid Authorization header. Credentials string '
-                   'should not contain spaces.')
+                _(
+                    "Invalid Authorization header. Credentials string "
+                    "should not contain spaces."
+                )
             )
 
         try:
             payload = jwt_decode_handler(auth[1])
         except jwt.ExpiredSignature:
-            raise exceptions.AuthenticationFailed(_('Signature has expired.'))
+            raise exceptions.AuthenticationFailed(_("Signature has expired."))
         except jwt.DecodeError:
-            raise exceptions.AuthenticationFailed(_('Error decoding signature.'))
+            raise exceptions.AuthenticationFailed(_("Error decoding signature."))
 
         user = self.authenticate_credentials(payload)
 
@@ -82,9 +84,9 @@ class JSONWebTokenAuthMixin(object):
             if user_id:
                 user = User.objects.get(pk=user_id, is_active=True)
             else:
-                raise exceptions.AuthenticationFailed(_('Invalid payload'))
+                raise exceptions.AuthenticationFailed(_("Invalid payload"))
         except User.DoesNotExist:
-            raise exceptions.AuthenticationFailed(_('Invalid signature'))
+            raise exceptions.AuthenticationFailed(_("Invalid signature"))
 
         return user
 

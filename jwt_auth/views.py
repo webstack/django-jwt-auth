@@ -10,8 +10,8 @@ from jwt_auth.forms import JSONWebTokenForm, JSONWebTokenRefreshForm
 
 
 class JSONWebTokenViewBase(View):
-    http_method_names = ['post']
-    error_response_dict = {'errors': [_('Improperly formatted request')]}
+    http_method_names = ["post"]
+    error_response_dict = {"errors": [_("Improperly formatted request")]}
     json_encoder_class = DjangoJSONEncoder
 
     @method_decorator(csrf_exempt)
@@ -30,18 +30,16 @@ class JSONWebTokenViewBase(View):
         form = self.get_form(request_json)
 
         if not form.is_valid():
-            return self.render_bad_request_response({'errors': form.errors})
+            return self.render_bad_request_response({"errors": form.errors})
 
-        context_dict = {
-            'token': form.object['token']
-        }
+        context_dict = {"token": form.object["token"]}
 
         return self.render_response(context_dict)
 
     def render_response(self, context_dict):
         json_context = json.dumps(context_dict, cls=self.json_encoder_class)
 
-        return HttpResponse(json_context, content_type='application/json')
+        return HttpResponse(json_context, content_type="application/json")
 
     def render_bad_request_response(self, error_dict=None):
         if error_dict is None:
@@ -49,8 +47,7 @@ class JSONWebTokenViewBase(View):
 
         json_context = json.dumps(error_dict, cls=self.json_encoder_class)
 
-        return HttpResponseBadRequest(
-            json_context, content_type='application/json')
+        return HttpResponseBadRequest(json_context, content_type="application/json")
 
 
 class ObtainJSONWebToken(JSONWebTokenViewBase):
