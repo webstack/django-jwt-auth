@@ -68,7 +68,7 @@ $ curl -H "Authorization: Bearer <your_token>" http://localhost:8000/protected-u
 There is also a provided middleware if you would prefer that to the view integration.  Just add the following to your middleware:
 
 ```python
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     # ...
     'jwt_auth.middleware.JWTAuthenticationMiddleware',
 )
