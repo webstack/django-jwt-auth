@@ -45,11 +45,11 @@ from jwt_auth.mixins import JSONWebTokenAuthMixin
 
 class RestrictedView(JSONWebTokenAuthMixin, View):
     def get(self, request):
-        data = json.dumps({
+        data = {
             "foo": "bar",
             "user_id": request.user.pk,
             "token": request.token
-        })
+        }
         return JsonResponse(data)
 ```
 

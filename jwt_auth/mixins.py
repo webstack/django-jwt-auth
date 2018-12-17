@@ -1,6 +1,6 @@
 import json
 import jwt
-from django.http import HttpResponse
+from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
@@ -30,12 +30,7 @@ class JSONWebTokenAuthMixin(object):
         try:
             request.user, request.token = self.authenticate(request)
         except exceptions.AuthenticationFailed as e:
-            response = HttpResponse(
-                json.dumps({"errors": [str(e)]}),
-                status=401,
-                content_type="application/json",
-            )
-
+            response = JsonResponse({"errors": [str(e)]}, status=401)
             response["WWW-Authenticate"] = self.authenticate_header(request)
 
             return response

@@ -1,7 +1,7 @@
 import json
 
 from django.core.serializers.json import DjangoJSONEncoder
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
@@ -37,17 +37,12 @@ class JSONWebTokenViewBase(View):
         return self.render_response(context_dict)
 
     def render_response(self, context_dict):
-        json_context = json.dumps(context_dict, cls=self.json_encoder_class)
-
-        return HttpResponse(json_context, content_type="application/json")
+        return JsonResponse(context_dict)
 
     def render_bad_request_response(self, error_dict=None):
         if error_dict is None:
-            error_dict = self.error_response_dict
-
-        json_context = json.dumps(error_dict, cls=self.json_encoder_class)
-
-        return HttpResponseBadRequest(json_context, content_type="application/json")
+            error_dict = self.error_response_dictx
+        return JsonResponse(error_dict, status=400)
 
 
 class ObtainJSONWebToken(JSONWebTokenViewBase):
