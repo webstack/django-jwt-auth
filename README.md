@@ -153,5 +153,5 @@ Default is `Bearer`.
 
 [build-status-image]: https://secure.travis-ci.org/webstack/django-jwt-auth.svg?branch=master
 [travis]: https://travis-ci.org/webstack/django-jwt-auth?branch=master
-[pypi-version]: https://img.shields.io/pypi/v/django-jwt-auth.svg
-[pypi]: https://pypi.python.org/pypi/django-jwt-auth
+[pypi-version]: https://img.shields.io/pypi/v/webstack-django-jwt-auth.svg
+[pypi]: https://pypi.python.org/pypi/webstack-django-jwt-auth
