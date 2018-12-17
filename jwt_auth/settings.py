@@ -1,9 +1,7 @@
 import datetime
 
 from django.conf import settings
-
 from jwt_auth.utils import import_from_string
-
 
 JWT_ENCODE_HANDLER = getattr(
     settings,

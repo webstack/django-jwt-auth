@@ -1,14 +1,11 @@
-from django.http import HttpResponse
-from django.utils.translation import ugettext as _
-
 import jwt
+from django.http import HttpResponse
 from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
-
-from jwt_auth import settings, exceptions
+from jwt_auth import exceptions, settings
+from jwt_auth.compat import User, json, smart_text
 from jwt_auth.utils import get_authorization_header
-from jwt_auth.compat import json, smart_text, User
-
 
 jwt_decode_handler = settings.JWT_DECODE_HANDLER
 jwt_get_user_id_from_payload = settings.JWT_PAYLOAD_GET_USER_ID_HANDLER

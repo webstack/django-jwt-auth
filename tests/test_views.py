@@ -4,9 +4,8 @@ from datetime import datetime, timedelta
 from django.shortcuts import reverse
 from django.test import TestCase
 from django.test.client import Client
-
-from jwt_auth import utils, settings
-from jwt_auth.compat import json, User, smart_text
+from jwt_auth import settings, utils
+from jwt_auth.compat import User, json, smart_text
 
 
 class ObtainJSONWebTokenTestCase(TestCase):

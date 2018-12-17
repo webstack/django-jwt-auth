@@ -1,7 +1,6 @@
 from django.shortcuts import reverse
 from django.test import TestCase
 from django.test.client import Client
-
 from jwt_auth import utils
 from jwt_auth.compat import User, json, smart_text
 
