@@ -12,8 +12,6 @@ url = 'https://github.com/jpadilla/django-jwt-auth'
 author = 'Jose Padilla'
 author_email = 'hello@jpadilla.com'
 license = 'MIT'
-install_requires = open('requirements.txt').read().split('\n')
-
 
 def get_version(package):
     """
@@ -71,7 +69,6 @@ setup(
     author_email=author_email,
     packages=get_packages(package),
     package_data=get_package_data(package),
-    install_requires=install_requires,
     test_suite="runtests.run_tests",
     classifiers=[
         'Development Status :: 5 - Production/Stable',
@@ -83,5 +80,9 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
         'Topic :: Internet :: WWW/HTTP',
-    ]
+    ],
+    install_requires=[
+        'Django>=2.0,<3.0',
+        'PyJWT>=1.7.1',
+    ],
 )
