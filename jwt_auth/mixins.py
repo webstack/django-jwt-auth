@@ -12,7 +12,55 @@ jwt_decode_handler = settings.JWT_DECODE_HANDLER
 jwt_get_user_id_from_payload = settings.JWT_PAYLOAD_GET_USER_ID_HANDLER
 
 
-class JSONWebTokenAuthMixin(object):
+def get_token_from_request(request):
+    auth = get_authorization_header(request).split()
+    auth_header_prefix = settings.JWT_AUTH_HEADER_PREFIX.lower()
+
+    if not auth or auth[0].lower().decode("utf-8") != auth_header_prefix:
+        raise exceptions.AuthenticationFailed()
+
+    if len(auth) == 1:
+        raise exceptions.AuthenticationFailed(
+            _("Invalid Authorization header. No credentials provided.")
+        )
+    elif len(auth) > 2:
+        raise exceptions.AuthenticationFailed(
+            _(
+                "Invalid Authorization header. Credentials string "
+                "should not contain spaces."
+            )
+        )
+
+    return auth[1]
+
+
+def get_payload_from_token(token):
+    try:
+        payload = jwt_decode_handler(token)
+    except jwt.ExpiredSignature:
+        raise exceptions.AuthenticationFailed(_("Signature has expired."))
+    except jwt.DecodeError:
+        raise exceptions.AuthenticationFailed(_("Error decoding signature."))
+
+    return payload
+
+
+def get_user_id_from_payload(payload):
+    user_id = jwt_get_user_id_from_payload(payload)
+    if not user_id:
+        raise exceptions.AuthenticationFailed(_("Invalid payload"))
+
+    return user_id
+
+
+def get_user(user_id):
+    try:
+        return User.objects.get(pk=user_id, is_active=True)
+    except User.DoesNotExist:
+        return None
+
+
+class JSONWebTokenAuthMixin:
     """
     Token based authentication using the JSON Web Token standard.
 
@@ -38,50 +86,11 @@ class JSONWebTokenAuthMixin(object):
         return super(JSONWebTokenAuthMixin, self).dispatch(request, *args, **kwargs)
 
     def authenticate(self, request):
-        auth = get_authorization_header(request).split()
-        auth_header_prefix = settings.JWT_AUTH_HEADER_PREFIX.lower()
-
-        if not auth or auth[0].lower().decode("utf-8") != auth_header_prefix:
-            raise exceptions.AuthenticationFailed()
-
-        if len(auth) == 1:
-            raise exceptions.AuthenticationFailed(
-                _("Invalid Authorization header. No credentials provided.")
-            )
-        elif len(auth) > 2:
-            raise exceptions.AuthenticationFailed(
-                _(
-                    "Invalid Authorization header. Credentials string "
-                    "should not contain spaces."
-                )
-            )
-
-        try:
-            payload = jwt_decode_handler(auth[1])
-        except jwt.ExpiredSignature:
-            raise exceptions.AuthenticationFailed(_("Signature has expired."))
-        except jwt.DecodeError:
-            raise exceptions.AuthenticationFailed(_("Error decoding signature."))
-
-        user = self.authenticate_credentials(payload)
-
-        return (user, auth[1])
-
-    def authenticate_credentials(self, payload):
-        """
-        Returns an active user that matches the payload's user id and email.
-        """
-        try:
-            user_id = jwt_get_user_id_from_payload(payload)
-
-            if user_id:
-                user = User.objects.get(pk=user_id, is_active=True)
-            else:
-                raise exceptions.AuthenticationFailed(_("Invalid payload"))
-        except User.DoesNotExist:
-            raise exceptions.AuthenticationFailed(_("Invalid signature"))
-
-        return user
+        """Method required."""
+        token = get_token_from_request(request)
+        payload = get_payload_from_token(token)
+        user_id = get_user_id_from_payload(payload)
+        return get_user(user_id), token
 
     def authenticate_header(self, request):
         """
