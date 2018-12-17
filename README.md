@@ -47,8 +47,7 @@ class RestrictedView(JSONWebTokenAuthMixin, View):
     def get(self, request):
         data = {
             "foo": "bar",
-            "user_id": request.user.pk,
-            "token": request.token
+            "username": request.user.username,
         }
         return JsonResponse(data)
 ```
