@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from django import forms
 from django.contrib.auth import authenticate, get_user_model
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.translation import ugettext as _
 
 from jwt_auth import settings
 from jwt_auth.compat import User
@@ -44,8 +45,7 @@ class JSONWebTokenForm(forms.Form):
 
             if user:
                 if not user.is_active:
-                    msg = 'User account is disabled.'
-                    raise forms.ValidationError(msg)
+                    raise forms.ValidationError(_('User account is disabled.'))
 
                 payload = jwt_payload_handler(user)
 
@@ -60,11 +60,9 @@ class JSONWebTokenForm(forms.Form):
                     'token': jwt_encode_handler(payload)
                 }
             else:
-                msg = 'Unable to login with provided credentials.'
-                raise forms.ValidationError(msg)
+                raise forms.ValidationError(_('Unable to login with provided credentials.'))
         else:
-            msg = 'Must include "username" and "password"'
-            raise forms.ValidationError(msg)
+            raise forms.ValidationError(_("Must include 'username' and 'password'."))
 
 
 class JSONWebTokenRefreshForm(forms.Form):
@@ -84,19 +82,16 @@ class JSONWebTokenRefreshForm(forms.Form):
         try:
             user = get_user_model().objects.get(id=user_id)
         except ObjectDoesNotExist:
-            msg = 'Unable to login with provided credentials.'
-            raise forms.ValidationError(msg)
+            raise forms.ValidationError(_('Unable to login with provided credentials.'))
 
         if not user.is_active:
-            msg = 'User account is disabled.'
-            raise forms.ValidationError(msg)
+            raise forms.ValidationError(_('User account is disabled.'))
 
         # Verify orig_iat
 
         orig_iat = old_payload.get('orig_iat')
         if not orig_iat:
-            msg = 'orig_iat was missing from payload.'
-            raise forms.ValidationError(msg)
+            raise forms.ValidationError(_('orig_iat was missing from payload.'))
 
         # Verify expiration
 
@@ -110,8 +105,7 @@ class JSONWebTokenRefreshForm(forms.Form):
         now_timestamp = timegm(datetime.utcnow().utctimetuple())
 
         if now_timestamp > expiration_timestamp:
-            msg = 'Refresh has expired.'
-            raise forms.ValidationError(msg)
+            raise forms.ValidationError(_('Refresh has expired.'))
 
         # Re-issue new token
 

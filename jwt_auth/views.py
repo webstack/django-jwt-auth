@@ -1,8 +1,9 @@
+from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
-from django.core.serializers.json import DjangoJSONEncoder
 
 from jwt_auth.compat import json, smart_text
 from jwt_auth.forms import JSONWebTokenForm, JSONWebTokenRefreshForm
@@ -10,7 +11,7 @@ from jwt_auth.forms import JSONWebTokenForm, JSONWebTokenRefreshForm
 
 class JSONWebTokenViewBase(View):
     http_method_names = ['post']
-    error_response_dict = {'errors': ['Improperly formatted request']}
+    error_response_dict = {'errors': [_('Improperly formatted request')]}
     json_encoder_class = DjangoJSONEncoder
 
     @method_decorator(csrf_exempt)

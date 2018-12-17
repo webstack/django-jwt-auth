@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.utils.translation import ugettext as _
 
 import jwt
 from django.utils.decorators import method_decorator
@@ -51,21 +52,21 @@ class JSONWebTokenAuthMixin(object):
             raise exceptions.AuthenticationFailed()
 
         if len(auth) == 1:
-            msg = 'Invalid Authorization header. No credentials provided.'
-            raise exceptions.AuthenticationFailed(msg)
+            raise exceptions.AuthenticationFailed(
+                _('Invalid Authorization header. No credentials provided.')
+            )
         elif len(auth) > 2:
-            msg = ('Invalid Authorization header. Credentials string '
+            raise exceptions.AuthenticationFailed(
+                _('Invalid Authorization header. Credentials string '
                    'should not contain spaces.')
-            raise exceptions.AuthenticationFailed(msg)
+            )
 
         try:
             payload = jwt_decode_handler(auth[1])
         except jwt.ExpiredSignature:
-            msg = 'Signature has expired.'
-            raise exceptions.AuthenticationFailed(msg)
+            raise exceptions.AuthenticationFailed(_('Signature has expired.'))
         except jwt.DecodeError:
-            msg = 'Error decoding signature.'
-            raise exceptions.AuthenticationFailed(msg)
+            raise exceptions.AuthenticationFailed(_('Error decoding signature.'))
 
         user = self.authenticate_credentials(payload)
 
@@ -81,11 +82,9 @@ class JSONWebTokenAuthMixin(object):
             if user_id:
                 user = User.objects.get(pk=user_id, is_active=True)
             else:
-                msg = 'Invalid payload'
-                raise exceptions.AuthenticationFailed(msg)
+                raise exceptions.AuthenticationFailed(_('Invalid payload'))
         except User.DoesNotExist:
-            msg = 'Invalid signature'
-            raise exceptions.AuthenticationFailed(msg)
+            raise exceptions.AuthenticationFailed(_('Invalid signature'))
 
         return user
 
