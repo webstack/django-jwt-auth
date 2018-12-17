@@ -65,6 +65,15 @@ Now in order to access protected api urls you must include the `Authorization: B
 $ curl -H "Authorization: Bearer <your_token>" http://localhost:8000/protected-url/
 ```
 
+There is also a provided middleware if you would prefer that to the view integration.  Just add the following to your middleware:
+
+```python
+MIDDLEWARE_CLASSES = (
+    # ...
+    'jwt_auth.middleware.JWTAuthenticationMiddleware',
+)
+```
+
 ## Additional Settings
 There are some additional settings that you can override similar to how you'd do it with Django REST framework itself. Here are all the available defaults.
 
@@ -149,7 +158,6 @@ If you store `user_id` differently than the default payload handler does, implem
 You can modify the Authorization header value prefix that is required to be sent together with the token.
 
 Default is `Bearer`.
-
 
 [build-status-image]: https://secure.travis-ci.org/webstack/django-jwt-auth.svg?branch=master
 [travis]: https://travis-ci.org/webstack/django-jwt-auth?branch=master
