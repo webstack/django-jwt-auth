@@ -87,29 +87,25 @@ There are some additional settings that you can override similar to how you'd do
 it with Django REST framework itself. Here are all the available defaults.
 
 ```python
-JWT_ENCODE_HANDLER = 'jwt_auth.utils.jwt_encode_handler'
-JWT_DECODE_HANDLER = 'jwt_auth.utils.jwt_decode_handler',
-JWT_PAYLOAD_HANDLER = 'jwt_auth.utils.jwt_payload_handler'
-JWT_PAYLOAD_GET_USER_ID_HANDLER = 'jwt_auth.utils.jwt_get_user_id_from_payload_handler'
-JWT_SECRET_KEY: SECRET_KEY
 JWT_ALGORITHM = 'HS256'
+JWT_ALLOW_REFRESH = False
+JWT_AUDIENCE = None
+JWT_AUTH_HEADER_PREFIX = 'Bearer'
+JWT_DECODE_HANDLER = 'jwt_auth.utils.jwt_decode_handler',
+JWT_ENCODE_HANDLER = 'jwt_auth.utils.jwt_encode_handler'
+JWT_EXPIRATION_DELTA = datetime.timedelta(seconds=300)
+JWT_LEEWAY = 0
+JWT_LOGIN_URL = settings.LOGIN_URL
+JWT_PAYLOAD_GET_USER_ID_HANDLER = 'jwt_auth.utils.jwt_get_user_id_from_payload_handler'
+JWT_PAYLOAD_HANDLER = 'jwt_auth.utils.jwt_payload_handler'
+JWT_REFRESH_EXPIRATION_DELTA = datetime.timedelta(days=7)
+JWT_SECRET_KEY: SECRET_KEY
 JWT_VERIFY = True
 JWT_VERIFY_EXPIRATION = True
-JWT_LEEWAY = 0
-JWT_EXPIRATION_DELTA = datetime.timedelta(seconds=300)
-JWT_ALLOW_REFRESH = False
-JWT_REFRESH_EXPIRATION_DELTA = datetime.timedelta(days=7)
-JWT_AUTH_HEADER_PREFIX = 'Bearer'
 ```
 This packages uses the JSON Web Token Python implementation,
 [PyJWT](https://github.com/progrium/pyjwt) and allows to modify some of it's
 available options.
-
-### JWT_SECRET_KEY
-This is the secret key used to encrypt the JWT. Make sure this is safe and not
-shared or public.
-
-Default is your project's `settings.SECRET_KEY`.
 
 ### JWT_ALGORITHM
 
@@ -130,6 +126,56 @@ Note:
 
 Default is `"HS256"`.
 
+### JWT_ALLOW_REFRESH
+Enable token refresh functionality. Token issued from
+`rest_framework_jwt.views.obtain_jwt_token` will have an `orig_iat` field.
+Default is `False`
+
+### JWT_AUDIENCE
+
+Typically, the base address of the resource being accessed, eg `https://example.com`.
+
+### JWT_AUTH_HEADER_PREFIX
+You can modify the Authorization header value prefix that is required to be sent
+together with the token.
+
+Default is `Bearer`.
+
+### JWT_EXPIRATION_DELTA
+This is an instance of Python's `datetime.timedelta`. This will be added to
+`datetime.utcnow()` to set the expiration time.
+
+Default is `datetime.timedelta(seconds=300)`(5 minutes).
+
+### JWT_LEEWAY
+
+> This allows you to validate an expiration time which is in the past but no
+> very far. For example, if you have a JWT payload with an expiration time set
+> to 30 seconds after creation but you know that sometimes you will process it
+> after 30 seconds, you can set a leeway of 10 seconds in order to have some
+> margin.
+
+Default is `0` seconds.
+
+### JWT_PAYLOAD_GET_USER_ID_HANDLER
+If you store `user_id` differently than the default payload handler does,
+implement this function to fetch `user_id` from the payload.
+
+### JWT_PAYLOAD_HANDLER
+Specify a custom function to generate the token payload
+
+### JWT_REFRESH_EXPIRATION_DELTA
+Limit on token refresh, is a `datetime.timedelta` instance. This is how much
+time after the original token that future tokens can be refreshed from.
+
+Default is `datetime.timedelta(days=7)` (7 days).
+
+### JWT_SECRET_KEY
+This is the secret key used to encrypt the JWT. Make sure this is safe and not
+shared or public.
+
+Default is your project's `settings.SECRET_KEY`.
+
 ### JWT_VERIFY
 
 If the secret is wrong, it will raise a jwt.DecodeError telling you as such. You
@@ -144,45 +190,6 @@ You can turn off expiration time verification with by setting
 
 Default is `True`.
 
-### JWT_LEEWAY
-
-> This allows you to validate an expiration time which is in the past but no
-> very far. For example, if you have a JWT payload with an expiration time set
-> to 30 seconds after creation but you know that sometimes you will process it
-> after 30 seconds, you can set a leeway of 10 seconds in order to have some
-> margin.
-
-Default is `0` seconds.
-
-### JWT_EXPIRATION_DELTA
-This is an instance of Python's `datetime.timedelta`. This will be added to
-`datetime.utcnow()` to set the expiration time.
-
-Default is `datetime.timedelta(seconds=300)`(5 minutes).
-
-### JWT_ALLOW_REFRESH
-Enable token refresh functionality. Token issued from
-`rest_framework_jwt.views.obtain_jwt_token` will have an `orig_iat` field.
-Default is `False`
-
-### JWT_REFRESH_EXPIRATION_DELTA
-Limit on token refresh, is a `datetime.timedelta` instance. This is how much
-time after the original token that future tokens can be refreshed from.
-
-Default is `datetime.timedelta(days=7)` (7 days).
-
-### JWT_PAYLOAD_HANDLER
-Specify a custom function to generate the token payload
-
-### JWT_PAYLOAD_GET_USER_ID_HANDLER
-If you store `user_id` differently than the default payload handler does,
-implement this function to fetch `user_id` from the payload.
-
-### JWT_AUTH_HEADER_PREFIX
-You can modify the Authorization header value prefix that is required to be sent
-together with the token.
-
-Default is `Bearer`.
 
 [build-status-image]: https://secure.travis-ci.org/webstack/django-jwt-auth.svg?branch=master
 [travis]: https://travis-ci.org/webstack/django-jwt-auth?branch=master
