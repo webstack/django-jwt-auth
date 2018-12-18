@@ -23,4 +23,4 @@ INSTALLED_APPS = (
 
 PASSWORD_HASHERS = ("django.contrib.auth.hashers.MD5PasswordHasher",)
 
-LOGIN_URL = "/token-auth/"
+JWT_LOGIN_URL = "/token-auth/"

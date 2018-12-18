@@ -50,3 +50,5 @@ JWT_REFRESH_EXPIRATION_DELTA = getattr(
 JWT_AUTH_HEADER_PREFIX = getattr(settings, "JWT_AUTH_HEADER_PREFIX", "Bearer")
 
 JWT_AUDIENCE = getattr(settings, "JWT_AUDIENCE", None)
+
+JWT_LOGIN_URL = getattr(settings, "JWT_LOGIN_URL", settings.LOGIN_URL)
