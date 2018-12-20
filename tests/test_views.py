@@ -10,7 +10,7 @@ from jwt_auth import settings, utils
 from jwt_auth.core import User
 
 
-class ObtainJSONWebTokenTestCase(TestCase):
+class JSONWebTokenTestCase(TestCase):
     def setUp(self):
         self.email = "foo@example.com"
         self.username = "foo"
@@ -22,7 +22,7 @@ class ObtainJSONWebTokenTestCase(TestCase):
         self.client = Client()
         self.auth_token_url = reverse("auth_token")
 
-    def test_jwt_login_json(self):
+    def test_login(self):
         """
         Ensure JWT login view using JSON POST works.
         """
@@ -38,7 +38,7 @@ class ObtainJSONWebTokenTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(decoded_payload["username"], self.username)
 
-    def test_jwt_login_json_bad_credentials(self):
+    def test_bad_credentials(self):
         """
         Ensure JWT login view using JSON POST fails if bad credentials are used.
         """
@@ -50,7 +50,7 @@ class ObtainJSONWebTokenTestCase(TestCase):
 
         self.assertEqual(response.status_code, 400)
 
-    def test_jwt_login_json_missing_fields(self):
+    def test_missing_fields(self):
         """
         Ensure JWT login view using JSON POST fails if missing fields.
         """
@@ -62,7 +62,7 @@ class ObtainJSONWebTokenTestCase(TestCase):
 
         self.assertEqual(response.status_code, 400)
 
-    def test_jwt_login_with_expired_token(self):
+    def test_login_with_expired_token(self):
         """
         Ensure JWT login view works even if expired token is provided
         """
@@ -85,7 +85,7 @@ class ObtainJSONWebTokenTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(decoded_payload["username"], self.username)
 
-    def test_jwt_login_invalid_payload(self):
+    def test_invalid_payload(self):
         # Not JSON content
         response = self.client.post(self.auth_token_url, {"foo": "bar"})
         self.assertEqual(response.status_code, 400)
@@ -104,7 +104,7 @@ class RefreshJSONWebTokenTestCase(TestCase):
         self.client = Client()
         self.refresh_auth_token_url = reverse("refresh_token")
 
-    def test_jwt_refresh_json(self):
+    def test_refresh(self):
         """
         Ensure JWT refresh view using JSON POST works.
         """
@@ -122,7 +122,7 @@ class RefreshJSONWebTokenTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(decoded_payload["username"], self.username)
 
-    def test_jwt_refresh_json_inactive_user(self):
+    def test_inactive_user(self):
         """
         Ensure JWT refresh view using JSON POST fails
         if the user is inactive
@@ -140,7 +140,7 @@ class RefreshJSONWebTokenTestCase(TestCase):
 
         self.assertEqual(response.status_code, 400)
 
-    def test_jwt_refresh_json_no_orig_iat(self):
+    def test_no_orig_iat(self):
         """
         Ensure JWT refresh view using JSON POST fails
         if no orig_iat is present on the payload.
@@ -156,7 +156,7 @@ class RefreshJSONWebTokenTestCase(TestCase):
 
         self.assertEqual(response.status_code, 400)
 
-    def test_jwt_refresh_with_expired_token(self):
+    def test_refresh_with_expired_token(self):
         """
         Ensure JWT refresh view using JSON POST fails
         if the refresh has expired

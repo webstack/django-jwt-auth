@@ -18,7 +18,7 @@ class JSONWebTokenAuthMixinTestCase(TestCase):
         self.client = Client()
         self.protected_url = reverse("protected")
 
-    def test_json_passing_jwt_auth(self):
+    def test_passing_jwt_auth(self):
         """
         Ensure getting form over JWT auth with correct credentials passes and
         does not require CSRF
@@ -36,7 +36,7 @@ class JSONWebTokenAuthMixinTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response_content["username"], self.username)
 
-    def test_json_failing_jwt_auth(self):
+    def test_failing_jwt_auth(self):
         """
         Ensure POSTing json over JWT auth without correct credentials fails
         """
