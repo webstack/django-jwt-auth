@@ -49,7 +49,7 @@ class JSONWebTokenViewBase(View):
         return JsonResponse(error_dict, status=400)
 
 
-class ObtainJSONWebToken(JSONWebTokenViewBase):
+class JSONWebToken(JSONWebTokenViewBase):
     def get_form(self, request_json):
         return JSONWebTokenForm(request_json)
 
@@ -59,5 +59,5 @@ class RefreshJSONWebToken(JSONWebTokenViewBase):
         return JSONWebTokenRefreshForm(request_json)
 
 
-obtain_jwt_token = ObtainJSONWebToken.as_view()
+jwt_token = JSONWebToken.as_view()
 refresh_jwt_token = RefreshJSONWebToken.as_view()

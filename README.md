@@ -33,7 +33,7 @@ from your_app.views import RestrictedView
 
 urlpatterns = [
     # ...
-    path("token-auth/", jwt_auth_views.obtain_jwt_token),
+    path("token-auth/", jwt_auth_views.jwt_token),
     path("token-refresh/", jwt_auth_views.refresh_jwt_token),
     path("protected-url/", RestrictedView.as_view()),
 ]
