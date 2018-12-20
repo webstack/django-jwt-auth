@@ -13,7 +13,6 @@ from jwt_auth.forms import JSONWebTokenForm, JSONWebTokenRefreshForm
 class JSONWebTokenViewBase(View):
     http_method_names = ["post"]
     error_response_dict = {"errors": [_("Improperly formatted request")]}
-    json_encoder_class = DjangoJSONEncoder
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
