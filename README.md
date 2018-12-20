@@ -127,8 +127,9 @@ Note:
 Default is `"HS256"`.
 
 ### JWT_ALLOW_REFRESH
-Enable token refresh functionality. Token issued from
-`rest_framework_jwt.views.obtain_jwt_token` will have an `orig_iat` field.
+Enable token refresh functionality. Token issued from `jwt_auth.views.jwt_token`
+will have an `orig_iat` field.
+
 Default is `False`
 
 ### JWT_AUDIENCE
