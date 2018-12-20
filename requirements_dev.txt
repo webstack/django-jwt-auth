@@ -1,3 +1,5 @@
 black
 bumpversion
 coverage
+twine
+wheel

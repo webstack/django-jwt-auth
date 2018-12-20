@@ -1,13 +1,16 @@
 #!/usr/bin/env python
 
-import os
 import sys
 from setuptools import setup
 
 if sys.argv[-1] == "publish":
-    os.system("python setup.py sdist upload")
-    os.system("python setup.py bdist_wheel upload")
-    print("You probably want to also tag the version now...")
+    print(
+        """
+    1. bumpversion minor (or patch, major)
+    2. python setup.py sdist bdist_wheel
+    3. twine upload dist/*
+    """
+    )
     sys.exit()
 
 
