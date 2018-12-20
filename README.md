@@ -6,12 +6,18 @@
 ## Overview
 This package provides [JSON Web Token
 Authentication](http://tools.ietf.org/html/draft-ietf-oauth-json-web-token)
-support for Django.
+support for Django by using [PyJWT](https://github.com/jpadilla/pyjwt).
 
-Based on the [Django REST Framework JWT
-Auth](https://github.com/GetBlimp/django-rest-framework-jwt) package and forked
-from (https://github.com/jpadilla/django-jwt-auth) to merge refresh view and few
-improvements.
+The project is a fork of (https://github.com/jpadilla/django-jwt-auth) created
+by José Padilla (maintainer of PyJWT too). José doesn't seem to have the time
+anymore to work on django-jwt-auth.
+
+New features from original code:
+
+- refresh token
+- provides 2 middlewares
+- Django 2.0
+- better coverage and packaging
 
 ## Installation
 
