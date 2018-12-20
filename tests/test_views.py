@@ -85,6 +85,11 @@ class ObtainJSONWebTokenTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(decoded_payload["username"], self.username)
 
+    def test_jwt_login_invalid_payload(self):
+        # Not JSON content
+        response = self.client.post(self.auth_token_url, {"foo": "bar"})
+        self.assertEqual(response.status_code, 400)
+
 
 class RefreshJSONWebTokenTestCase(TestCase):
     def setUp(self):

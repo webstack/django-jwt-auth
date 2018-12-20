@@ -45,7 +45,7 @@ class JSONWebTokenViewBase(View):
 
     def render_bad_request_response(self, error_dict=None):
         if error_dict is None:
-            error_dict = self.error_response_dictx
+            error_dict = self.error_response_dict
         return JsonResponse(error_dict, status=400)
 
 
