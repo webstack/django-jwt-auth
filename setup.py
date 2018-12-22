@@ -14,12 +14,21 @@ if sys.argv[-1] == "publish":
     sys.exit()
 
 
+def get_long_description():
+    """
+    Return the README.
+    """
+    return open("README.md", "r", encoding="utf8").read()
+
+
 setup(
     name="webstack-django-jwt-auth",
     version="0.5.0",
     url="https://github.com/webstack/django-jwt-auth",
     license="MIT",
     description="JSON Web Token based authentication for Django",
+    long_description=get_long_description(),
+    long_description_content_type="text/markdown",
     # Original author is "Jose Padilla <hello@jpadilla.com>"
     author="Stéphane Raimbault",
     author_email="stephane.raimbault@webstack.fr",
