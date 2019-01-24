@@ -111,4 +111,4 @@ class JSONWebTokenRefreshForm(forms.Form):
         # Re-issue new token
         # Include original issued at time for a brand new token,
         # to allow token refresh
-        self.object = {"token": json_web_token_form_encode_payload(user, orig_iat)}
+        self.object = {"token": json_web_token_encode_payload(user, orig_iat)}
