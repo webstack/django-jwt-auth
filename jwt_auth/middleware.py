@@ -1,5 +1,3 @@
-import json
-import jwt
 import logging
 
 from django.conf import settings
@@ -7,8 +5,6 @@ from django.contrib.auth.models import AnonymousUser
 from django.http import JsonResponse
 from django.utils.translation import ugettext as _
 from jwt_auth import settings as jwt_auth_settings, exceptions, mixins
-from jwt_auth.core import User
-from jwt_auth.utils import get_authorization_header
 
 logger = logging.getLogger(__name__)
 

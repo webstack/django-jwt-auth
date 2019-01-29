@@ -1,6 +1,5 @@
 import json
 
-from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
@@ -21,7 +20,7 @@ class JSONWebTokenViewBase(View):
     def get_form(self, request_json):
         raise NotImplementedError()
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         try:
             request_json = json.loads(request.body.decode("utf-8"))
         except ValueError:
@@ -39,7 +38,7 @@ class JSONWebTokenViewBase(View):
 
         return self.render_response(context_dict)
 
-    def render_response(self, context_dict):
+    def render_response(self, context_dict):  # pylint: disable=no-self-use
         return JsonResponse(context_dict)
 
     def render_bad_request_response(self, error_dict=None):

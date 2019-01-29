@@ -1,4 +1,3 @@
-import json
 import jwt
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
@@ -77,15 +76,15 @@ class JSONWebTokenAuthMixin:
     def dispatch(self, request, *args, **kwargs):
         try:
             request.user, request.token = self.authenticate(request)
-        except exceptions.AuthenticationFailed as e:
-            response = JsonResponse({"errors": [str(e)]}, status=401)
+        except exceptions.AuthenticationFailed as error:
+            response = JsonResponse({"errors": [str(error)]}, status=401)
             response["WWW-Authenticate"] = self.authenticate_header(request)
 
             return response
 
         return super(JSONWebTokenAuthMixin, self).dispatch(request, *args, **kwargs)
 
-    def authenticate(self, request):
+    def authenticate(self, request):  # pylint: disable=no-self-use
         """Method required."""
         token = get_token_from_request(request)
         payload = get_payload_from_token(token)

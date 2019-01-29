@@ -6,6 +6,7 @@ class AuthenticationFailed(Exception):
     detail = _("Incorrect authentication credentials.")
 
     def __init__(self, detail=None):
+        super().__init__(self)
         self.detail = detail or self.detail
 
     def __str__(self):

@@ -65,11 +65,11 @@ def import_from_string(val):
         module_path, class_name = ".".join(parts[:-1]), parts[-1]
         module = importlib.import_module(module_path)
         return getattr(module, class_name)
-    except ImportError as e:
+    except ImportError as error:
         msg = "Could not import '%s' for setting. %s: %s." % (
             val,
-            e.__class__.__name__,
-            e,
+            error.__class__.__name__,
+            error,
         )
         raise ImportError(msg)
 
