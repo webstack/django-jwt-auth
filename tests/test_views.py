@@ -27,10 +27,9 @@ class JSONWebTokenTestCase(TestCase):
         Ensure JWT login view using JSON POST works.
         """
         response = self.client.post(
-            self.auth_token_url, json.dumps(self.data), content_type="application/json"
+            self.auth_token_url, self.data, content_type="application/json"
         )
-        response_content = json.loads(response.content.decode("utf-8"))
-
+        response_content = response.json()
         expires_in = response_content["expires_in"]
         self.assertEqual(expires_in, settings.JWT_EXPIRATION_DELTA.total_seconds())
         decoded_payload = utils.jwt_decode_handler(response_content["token"])
@@ -45,9 +44,8 @@ class JSONWebTokenTestCase(TestCase):
         self.data["password"] = "wrong"
 
         response = self.client.post(
-            self.auth_token_url, json.dumps(self.data), content_type="application/json"
+            self.auth_token_url, self.data, content_type="application/json"
         )
-
         self.assertEqual(response.status_code, 400)
 
     def test_missing_fields(self):
@@ -56,10 +54,9 @@ class JSONWebTokenTestCase(TestCase):
         """
         response = self.client.post(
             self.auth_token_url,
-            json.dumps({"username": self.username}),
+            {"username": self.username},
             content_type="application/json",
         )
-
         self.assertEqual(response.status_code, 400)
 
     def test_login_with_expired_token(self):
@@ -74,12 +71,11 @@ class JSONWebTokenTestCase(TestCase):
 
         response = self.client.post(
             self.auth_token_url,
-            json.dumps(self.data),
+            self.data,
             content_type="application/json",
             HTTP_AUTHORIZATION=auth,
         )
-        response_content = json.loads(response.content.decode("utf-8"))
-
+        response_content = response.json()
         decoded_payload = utils.jwt_decode_handler(response_content["token"])
 
         self.assertEqual(response.status_code, 200)
@@ -111,13 +107,9 @@ class RefreshJSONWebTokenTestCase(TestCase):
         data = {"token": utils.jwt_encode_handler(self.payload)}
 
         response = self.client.post(
-            self.refresh_auth_token_url,
-            json.dumps(data),
-            content_type="application/json",
+            self.refresh_auth_token_url, data, content_type="application/json"
         )
-        response_content = json.loads(response.content.decode("utf-8"))
-
-        decoded_payload = utils.jwt_decode_handler(response_content["token"])
+        decoded_payload = utils.jwt_decode_handler(response.json()["token"])
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(decoded_payload["username"], self.username)
@@ -133,9 +125,7 @@ class RefreshJSONWebTokenTestCase(TestCase):
 
         data = {"token": utils.jwt_encode_handler(self.payload)}
         response = self.client.post(
-            self.refresh_auth_token_url,
-            json.dumps(data),
-            content_type="application/json",
+            self.refresh_auth_token_url, data, content_type="application/json"
         )
 
         self.assertEqual(response.status_code, 400)
@@ -149,9 +139,7 @@ class RefreshJSONWebTokenTestCase(TestCase):
 
         data = {"token": utils.jwt_encode_handler(self.payload)}
         response = self.client.post(
-            self.refresh_auth_token_url,
-            json.dumps(data),
-            content_type="application/json",
+            self.refresh_auth_token_url, data, content_type="application/json"
         )
 
         self.assertEqual(response.status_code, 400)
@@ -173,9 +161,7 @@ class RefreshJSONWebTokenTestCase(TestCase):
         self.payload["orig_iat"] = timegm(orig_iat.utctimetuple())
         data = {"token": utils.jwt_encode_handler(self.payload)}
         response = self.client.post(
-            self.refresh_auth_token_url,
-            json.dumps(data),
-            content_type="application/json",
+            self.refresh_auth_token_url, data, content_type="application/json"
         )
 
         self.assertEqual(response.status_code, 400)

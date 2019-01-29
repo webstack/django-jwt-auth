@@ -21,16 +21,14 @@ class MiddlewareTestCase(TestCase):
         self.plain_url = reverse("plain")
 
     def get_auth_header(self, response):
-        content = json.loads(response.content.decode("utf-8"))
-        return "Bearer {0}".format(content["token"])
+        return "Bearer {0}".format(response.json()["token"])
 
 
 class NoMiddleWareTestCase(MiddlewareTestCase):
     def test_access_allowed(self):
         response = self.client.get(self.plain_url)
         self.assertEqual(response.status_code, 200)
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(content["username"], None)
+        self.assertEqual(response.json()["username"], None)
 
     def test_access_denied_to_protected(self):
         response = self.client.get(self.protected_url)
@@ -44,15 +42,14 @@ class JWTAuthenticationMiddlewareTestCase(MiddlewareTestCase):
     def test_anonymous(self):
         response = self.client.get(self.plain_url)
         self.assertEqual(response.status_code, 200)
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(content["username"], "")
+        self.assertEqual(response.json()["username"], "")
 
     @modify_settings(
         MIDDLEWARE={"append": "jwt_auth.middleware.JWTAuthenticationMiddleware"}
     )
     def test_authenticated(self):
         response = self.client.post(
-            self.auth_token_url, json.dumps(self.data), content_type="application/json"
+            self.auth_token_url, self.data, content_type="application/json"
         )
         self.assertEqual(response.status_code, 200)
         header_value = self.get_auth_header(response)
@@ -61,8 +58,7 @@ class JWTAuthenticationMiddlewareTestCase(MiddlewareTestCase):
             content_type="application/json",
             HTTP_AUTHORIZATION=header_value,
         )
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(content["username"], "foo")
+        self.assertEqual(response.json()["username"], "foo")
 
 
 class RequiredJWTAuthenticationMiddlewareTestCase(MiddlewareTestCase):
@@ -81,7 +77,7 @@ class RequiredJWTAuthenticationMiddlewareTestCase(MiddlewareTestCase):
     )
     def test_access_allowed(self):
         response = self.client.post(
-            self.auth_token_url, json.dumps(self.data), content_type="application/json"
+            self.auth_token_url, self.data, content_type="application/json"
         )
         self.assertEqual(response.status_code, 200)
         header_value = self.get_auth_header(response)

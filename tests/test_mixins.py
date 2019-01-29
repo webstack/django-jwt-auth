@@ -31,23 +31,19 @@ class JSONWebTokenAuthMixinTestCase(TestCase):
             self.protected_url, content_type="application/json", HTTP_AUTHORIZATION=auth
         )
 
-        response_content = json.loads(response.content.decode("utf-8"))
-
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response_content["username"], self.username)
+        self.assertEqual(response.json()["username"], self.username)
 
     def test_failing_jwt_auth(self):
         """
         Ensure POSTing json over JWT auth without correct credentials fails
         """
         response = self.client.get(self.protected_url, content_type="application/json")
-        response_content = json.loads(response.content.decode("utf-8"))
 
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response["WWW-Authenticate"], 'JWT realm="api"')
-
         expected_error = ["Incorrect authentication credentials."]
-        self.assertEqual(response_content["errors"], expected_error)
+        self.assertEqual(response.json()["errors"], expected_error)
 
     def test_no_jwt_header_failing_jwt_auth(self):
         """
@@ -57,13 +53,11 @@ class JSONWebTokenAuthMixinTestCase(TestCase):
         response = self.client.get(
             self.protected_url, content_type="application/json", HTTP_AUTHORIZATION=auth
         )
-        response_content = json.loads(response.content.decode("utf-8"))
-
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response["WWW-Authenticate"], 'JWT realm="api"')
 
         expected_error = ["Invalid Authorization header. No credentials provided."]
-        self.assertEqual(response_content["errors"], expected_error)
+        self.assertEqual(response.json()["errors"], expected_error)
 
     def test_invalid_jwt_header_failing_jwt_auth(self):
         """
@@ -73,14 +67,12 @@ class JSONWebTokenAuthMixinTestCase(TestCase):
         response = self.client.post(
             self.protected_url, content_type="application/json", HTTP_AUTHORIZATION=auth
         )
-        response_content = json.loads(response.content.decode("utf-8"))
-
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response["WWW-Authenticate"], 'JWT realm="api"')
         expected_error = [
             "Invalid Authorization header. Credentials string should not contain spaces."
         ]
-        self.assertEqual(response_content["errors"], expected_error)
+        self.assertEqual(response.json()["errors"], expected_error)
 
     def test_expired_token_failing_jwt_auth(self):
         """
@@ -94,13 +86,10 @@ class JSONWebTokenAuthMixinTestCase(TestCase):
         response = self.client.get(
             self.protected_url, content_type="application/json", HTTP_AUTHORIZATION=auth
         )
-        response_content = json.loads(response.content.decode("utf-8"))
-
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response["WWW-Authenticate"], 'JWT realm="api"')
-
         expected_error = ["Signature has expired."]
-        self.assertEqual(response_content["errors"], expected_error)
+        self.assertEqual(response.json()["errors"], expected_error)
 
     def test_invalid_token_failing_jwt_auth(self):
         """
@@ -110,10 +99,8 @@ class JSONWebTokenAuthMixinTestCase(TestCase):
         response = self.client.get(
             self.protected_url, content_type="application/json", HTTP_AUTHORIZATION=auth
         )
-        response_content = json.loads(response.content.decode("utf-8"))
-
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response["WWW-Authenticate"], 'JWT realm="api"')
 
         expected_error = ["Error decoding signature."]
-        self.assertEqual(response_content["errors"], expected_error)
+        self.assertEqual(response.json()["errors"], expected_error)
