@@ -33,7 +33,7 @@ class JSONWebTokenViewBase(View):
 
         context_dict = {
             "token": form.object["token"],
-            "expiresIn": jwt_auth_settings.JWT_EXPIRATION_DELTA.total_seconds(),
+            "expires_in": jwt_auth_settings.JWT_EXPIRATION_DELTA.total_seconds(),
         }
 
         return self.render_response(context_dict)

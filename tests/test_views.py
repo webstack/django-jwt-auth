@@ -31,7 +31,7 @@ class JSONWebTokenTestCase(TestCase):
         )
         response_content = json.loads(response.content.decode("utf-8"))
 
-        expires_in = response_content["expiresIn"]
+        expires_in = response_content["expires_in"]
         self.assertEqual(expires_in, settings.JWT_EXPIRATION_DELTA.total_seconds())
         decoded_payload = utils.jwt_decode_handler(response_content["token"])
 
