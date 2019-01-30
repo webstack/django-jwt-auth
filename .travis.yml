@@ -1,8 +1,9 @@
+dist: xenial
+language: python
 addons:
  apt:
   packages:
    enchant
-language: python
 sudo: false
 cache: pip
 python:
