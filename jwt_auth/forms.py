@@ -1,4 +1,3 @@
-from calendar import timegm
 from datetime import datetime, timedelta
 
 from django import forms
@@ -77,7 +76,7 @@ class JSONWebTokenRefreshForm(forms.Form):
             refresh_limit = refresh_limit.days * 24 * 3600 + refresh_limit.seconds
 
         expiration_timestamp = orig_iat + int(refresh_limit)
-        now_timestamp = timegm(datetime.utcnow().utctimetuple())
+        now_timestamp = datetime.utcnow().timestamp()
 
         if now_timestamp > expiration_timestamp:
             raise forms.ValidationError(_("Refresh has expired."))

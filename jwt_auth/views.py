@@ -1,7 +1,5 @@
-import json
-
-from calendar import timegm
 from datetime import datetime
+import json
 
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
@@ -19,7 +17,7 @@ def encode_token_for_user(user, orig_iat=None):
         if jwt_auth_settings.JWT_ALLOW_REFRESH:
             # Include original issued at time for a brand new token, to
             # allow token refresh
-            payload["orig_iat"] = timegm(datetime.utcnow().utctimetuple())
+            payload["orig_iat"] = int(datetime.utcnow().timestamp())
     else:
         payload["orig_iat"] = orig_iat
 
