@@ -9,24 +9,8 @@ from jwt_auth import settings
 from jwt_auth.core import User
 from jwt_auth.utils import jwt_get_user_id_from_payload_handler
 
-jwt_payload_handler = settings.JWT_PAYLOAD_HANDLER
-jwt_encode_handler = settings.JWT_ENCODE_HANDLER
 jwt_decode_handler = settings.JWT_DECODE_HANDLER
 jwt_get_user_id_from_payload = settings.JWT_PAYLOAD_GET_USER_ID_HANDLER
-
-
-def json_web_token_encode_payload(user, orig_iat=None):
-    payload = jwt_payload_handler(user)
-
-    if orig_iat is None:
-        if settings.JWT_ALLOW_REFRESH:
-            # Include original issued at time for a brand new token, to
-            # allow token refresh
-            payload["orig_iat"] = timegm(datetime.utcnow().utctimetuple())
-    else:
-        payload["orig_iat"] = orig_iat
-
-    return jwt_encode_handler(payload)
 
 
 class JSONWebTokenForm(forms.Form):
@@ -37,7 +21,6 @@ class JSONWebTokenForm(forms.Form):
 
         # Dynamically add the USERNAME_FIELD to self.fields.
         self.fields[self.username_field] = forms.CharField()
-        self.object = None
 
     @property
     def username_field(self):
@@ -53,28 +36,22 @@ class JSONWebTokenForm(forms.Form):
             "password": cleaned_data.get("password"),
         }
 
-        if all(credentials.values()):
-            user = authenticate(**credentials)
-
-            if user:
-                if not user.is_active:
-                    raise forms.ValidationError(_("User account is disabled."))
-
-                self.object = {"token": json_web_token_encode_payload(user)}
-            else:
-                raise forms.ValidationError(
-                    _("Unable to login with provided credentials.")
-                )
-        else:
+        if not all(credentials.values()):
             raise forms.ValidationError(_("Must include 'username' and 'password'."))
+
+        user = authenticate(**credentials)
+
+        if user:
+            if not user.is_active:
+                raise forms.ValidationError(_("User account is disabled."))
+        else:
+            raise forms.ValidationError(_("Unable to login with provided credentials."))
+
+        cleaned_data["user"] = user
 
 
 class JSONWebTokenRefreshForm(forms.Form):
     token = forms.CharField()
-
-    def __init__(self, *args, **kwargs):
-        super(JSONWebTokenRefreshForm, self).__init__(*args, **kwargs)
-        self.object = None
 
     def clean(self):
         cleaned_data = super(JSONWebTokenRefreshForm, self).clean()
@@ -108,7 +85,7 @@ class JSONWebTokenRefreshForm(forms.Form):
         if now_timestamp > expiration_timestamp:
             raise forms.ValidationError(_("Refresh has expired."))
 
-        # Re-issue new token
-        # Include original issued at time for a brand new token,
-        # to allow token refresh
-        self.object = {"token": json_web_token_encode_payload(user, orig_iat)}
+        # Data to re-issue new token. Include original issued at time for a
+        # brand new token, to allow token refresh.
+        cleaned_data["user"] = user
+        cleaned_data["orig_iat"] = orig_iat
