@@ -10,7 +10,7 @@ from jwt_auth import settings as jwt_auth_settings
 from jwt_auth.forms import JSONWebTokenForm, JSONWebTokenRefreshForm
 
 
-def encode_token_for_user(user, orig_iat=None):
+def jwt_encode_token(user, orig_iat=None):
     payload = jwt_auth_settings.JWT_PAYLOAD_HANDLER(user)
 
     if orig_iat is None:
@@ -24,7 +24,7 @@ def encode_token_for_user(user, orig_iat=None):
     return jwt_auth_settings.JWT_ENCODE_HANDLER(payload)
 
 
-def get_json_response_data(token):
+def jwt_get_json_with_token(token):
     return {
         "token": token,
         "expires_in": jwt_auth_settings.JWT_EXPIRATION_DELTA.total_seconds(),
@@ -54,10 +54,10 @@ class JSONWebTokenViewBase(View):
         if not form.is_valid():
             return JsonResponse({"errors": form.errors}, status=400)
 
-        token = encode_token_for_user(
+        token = jwt_encode_token(
             form.cleaned_data["user"], form.cleaned_data.get("orig_iat")
         )
-        return JsonResponse(get_json_response_data(token))
+        return JsonResponse(jwt_get_json_with_token(token))
 
 
 class JSONWebToken(JSONWebTokenViewBase):
