@@ -5,12 +5,9 @@ from django import forms
 from django.contrib.auth import authenticate
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext as _
-from jwt_auth import settings
+from jwt_auth import settings as jwt_auth_settings
 from jwt_auth.core import User
 from jwt_auth.utils import jwt_get_user_id_from_payload_handler
-
-jwt_decode_handler = settings.JWT_DECODE_HANDLER
-jwt_get_user_id_from_payload = settings.JWT_PAYLOAD_GET_USER_ID_HANDLER
 
 
 class JSONWebTokenForm(forms.Form):
@@ -56,7 +53,7 @@ class JSONWebTokenRefreshForm(forms.Form):
     def clean(self):
         cleaned_data = super(JSONWebTokenRefreshForm, self).clean()
 
-        old_payload = jwt_decode_handler(cleaned_data.get("token"))
+        old_payload = jwt_auth_settings.JWT_DECODE_HANDLER(cleaned_data.get("token"))
         user_id = jwt_get_user_id_from_payload_handler(old_payload)
 
         # Verify user
@@ -74,7 +71,7 @@ class JSONWebTokenRefreshForm(forms.Form):
             raise forms.ValidationError(_("orig_iat was missing from payload."))
 
         # Verify expiration
-        refresh_limit = settings.JWT_REFRESH_EXPIRATION_DELTA
+        refresh_limit = jwt_auth_settings.JWT_REFRESH_EXPIRATION_DELTA
 
         if isinstance(refresh_limit, timedelta):
             refresh_limit = refresh_limit.days * 24 * 3600 + refresh_limit.seconds
