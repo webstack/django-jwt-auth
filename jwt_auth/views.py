@@ -26,6 +26,7 @@ def jwt_encode_token(user, orig_iat=None):
 
 def jwt_get_json_with_token(token):
     return {
+        "token_type": jwt_auth_settings.JWT_AUTH_HEADER_PREFIX,
         "token": token,
         "expires_in": jwt_auth_settings.JWT_EXPIRATION_DELTA.total_seconds(),
     }
@@ -50,7 +51,6 @@ class JSONWebTokenViewBase(View):
             )
 
         form = self.get_form(request_json)
-
         if not form.is_valid():
             return JsonResponse({"errors": form.errors}, status=400)
 
