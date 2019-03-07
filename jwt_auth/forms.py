@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 from django import forms
 from django.contrib.auth import authenticate
+from django.contrib.auth.signals import user_logged_in
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext as _
 from jwt_auth import settings as jwt_auth_settings
@@ -41,9 +42,11 @@ class JSONWebTokenForm(forms.Form):
             if not user.is_active:
                 raise forms.ValidationError(_("User account is disabled."))
         else:
+
             raise forms.ValidationError(_("Unable to login with provided credentials."))
 
         cleaned_data["user"] = user
+        user_logged_in.send(sender=user.__class__, request=None, user=user)
 
 
 class JSONWebTokenRefreshForm(forms.Form):
