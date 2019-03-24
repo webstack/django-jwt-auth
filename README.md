@@ -68,7 +68,7 @@ terminal, if you had a user created with the username **admin** and password
 **abc123**.
 
 ```bash
-$ curl -X POST -H "Content-Type: application/json" -d '{"username":"admin","password":"abc123"}' http://localhost:8000/api-token-auth/
+$ curl -X POST -H "Content-Type: application/json" -d '{"username":"admin","password":"abc123"}' http://localhost:8000/token-auth/
 ```
 
 Now in order to access protected api urls you must include the `Authorization:
