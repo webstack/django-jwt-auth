@@ -53,15 +53,15 @@ class RequiredJWTAuthenticationMiddleware:
 
     Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdW....
 
-    Requests without the required JWT are not allowed (401), only requests on
-    the login URL are allowed.
+    Requests without the required JWT are not allowed (401), only requests in
+    JWT_ALLOWED_URLS are allowed.
     """
 
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
-        if request.path_info != settings.JWT_LOGIN_URL:
+        if request.path_info not in settings.JWT_ALLOWED_URLS:
             try:
                 token = mixins.get_token_from_request(request)
                 payload = mixins.get_payload_from_token(token)
