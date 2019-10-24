@@ -101,7 +101,7 @@ JWT_DECODE_HANDLER = 'jwt_auth.utils.jwt_decode_handler',
 JWT_ENCODE_HANDLER = 'jwt_auth.utils.jwt_encode_handler'
 JWT_EXPIRATION_DELTA = datetime.timedelta(seconds=300)
 JWT_LEEWAY = 0
-JWT_LOGIN_URL = settings.LOGIN_URL
+JWT_LOGIN_URLS = [settings.LOGIN_URL]
 JWT_PAYLOAD_GET_USER_ID_HANDLER = 'jwt_auth.utils.jwt_get_user_id_from_payload_handler'
 JWT_PAYLOAD_HANDLER = 'jwt_auth.utils.jwt_payload_handler'
 JWT_REFRESH_EXPIRATION_DELTA = datetime.timedelta(days=7)
@@ -163,6 +163,12 @@ Default is `datetime.timedelta(seconds=300)`(5 minutes).
 > margin.
 
 Default is `0` seconds.
+
+### JWT_LOGIN_URLS
+
+Set the list of URLs that will be used to authenticate the user, you should take
+care to set only required URLs because the middleware will accept
+non-authenticated requests (no JWT) to these endpoints.
 
 ### JWT_PAYLOAD_GET_USER_ID_HANDLER
 If you store `user_id` differently than the default payload handler does,

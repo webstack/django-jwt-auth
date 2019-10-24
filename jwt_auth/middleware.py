@@ -61,7 +61,7 @@ class RequiredJWTAuthenticationMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if request.path_info != settings.JWT_LOGIN_URL:
+        if request.path_info not in settings.JWT_LOGIN_URLS:
             try:
                 token = mixins.get_token_from_request(request)
                 payload = mixins.get_payload_from_token(token)
