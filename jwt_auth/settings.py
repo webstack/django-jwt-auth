@@ -1,4 +1,5 @@
 import datetime
+import warnings
 
 from django.conf import settings
 from jwt_auth.utils import import_from_string
@@ -46,5 +47,8 @@ JWT_REFRESH_EXPIRATION_DELTA = getattr(
 JWT_AUTH_HEADER_PREFIX = getattr(settings, "JWT_AUTH_HEADER_PREFIX", "Bearer")
 
 JWT_AUDIENCE = getattr(settings, "JWT_AUDIENCE", None)
+
+if getattr(settings, "JWT_LOGIN_URL"):
+    warnings.warn("'JWT_LOGIN_URL' has been replaced by 'JWT_LOGIN_URLS'")
 
 JWT_LOGIN_URLS = getattr(settings, "JWT_LOGIN_URLS", [settings.LOGIN_URL])
