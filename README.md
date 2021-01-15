@@ -1,5 +1,6 @@
 # Django JWT Auth
 
+![Test Suite](https://github.com/webstack/django-jwt-auth/workflows/Test%20Suite/badge.svg)
 [![pypi-version]][pypi]
 
 ## Overview
