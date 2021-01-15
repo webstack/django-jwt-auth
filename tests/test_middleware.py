@@ -1,9 +1,6 @@
-import json
-
 from django.shortcuts import reverse
 from django.test import TestCase, modify_settings
 from django.test.client import Client
-from jwt_auth import utils
 from jwt_auth.core import User
 
 

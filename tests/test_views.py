@@ -1,5 +1,3 @@
-import json
-
 from calendar import timegm
 from datetime import datetime, timedelta
 

@@ -1,5 +1,3 @@
-import json
-
 from django.shortcuts import reverse
 from django.test import TestCase
 from django.test.client import Client
