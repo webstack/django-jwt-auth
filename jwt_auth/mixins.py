@@ -36,7 +36,7 @@ def get_token_from_request(request):
 def get_payload_from_token(token):
     try:
         payload = jwt_decode_handler(token)
-    except jwt.ExpiredSignature:
+    except jwt.ExpiredSignatureError:
         raise exceptions.AuthenticationFailed(_("Signature has expired."))
     except jwt.DecodeError:
         raise exceptions.AuthenticationFailed(_("Error decoding signature."))

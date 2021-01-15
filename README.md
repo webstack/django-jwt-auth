@@ -23,7 +23,7 @@ New features from original code:
 
 Install using `pip`...
 
-```
+```shell
 $ pip install webstack-django-jwt-auth
 ```
 

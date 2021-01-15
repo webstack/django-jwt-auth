@@ -45,5 +45,5 @@ setup(
         "Programming Language :: Python :: 3",
         "Topic :: Internet :: WWW/HTTP",
     ],
-    install_requires=["Django>=2.0", "PyJWT>=1.7.1"],
+    install_requires=["Django>=2.0", "PyJWT>=2.0.0"],
 )

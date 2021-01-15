@@ -31,20 +31,21 @@ def jwt_get_user_id_from_payload_handler(payload):
 def jwt_encode_handler(payload):
     from jwt_auth import settings
 
-    return jwt.encode(payload, settings.JWT_SECRET_KEY, settings.JWT_ALGORITHM).decode(
-        "utf-8"
-    )
+    return jwt.encode(payload, settings.JWT_SECRET_KEY, settings.JWT_ALGORITHM)
 
 
 def jwt_decode_handler(token):
     from jwt_auth import settings
 
-    options = {"verify_exp": settings.JWT_VERIFY_EXPIRATION}
+    options = {
+        "verify_exp": settings.JWT_VERIFY_EXPIRATION,
+        "verify": settings.JWT_VERIFY,
+    }
 
     return jwt.decode(
-        token,
-        settings.JWT_SECRET_KEY,
-        settings.JWT_VERIFY,
+        jwt=token,
+        key=settings.JWT_SECRET_KEY,
+        algorithms=["HS256"],
         options=options,
         leeway=settings.JWT_LEEWAY,
         audience=settings.JWT_AUDIENCE,
