@@ -1,6 +1,5 @@
 # Django JWT Auth
 
-[![build-status-image]][travis]
 [![pypi-version]][pypi]
 
 ## Overview
@@ -203,8 +202,5 @@ You can turn off expiration time verification with by setting
 
 Default is `True`.
 
-
-[build-status-image]: https://secure.travis-ci.org/webstack/django-jwt-auth.svg?branch=master
-[travis]: https://travis-ci.org/webstack/django-jwt-auth?branch=master
 [pypi-version]: https://img.shields.io/pypi/v/webstack-django-jwt-auth.svg
 [pypi]: https://pypi.python.org/pypi/webstack-django-jwt-auth
