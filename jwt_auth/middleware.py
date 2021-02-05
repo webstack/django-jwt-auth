@@ -2,6 +2,7 @@ import logging
 
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.middleware import get_user
 from django.http import JsonResponse
 from django.utils.translation import ugettext as _
 from jwt_auth import settings as jwt_auth_settings, exceptions, mixins
@@ -30,6 +31,8 @@ class JWTAuthenticationMiddleware:
 
     def __call__(self, request):
         user = None
+        if hasattr(request, 'session'):
+          user = get_user(request)
         try:
             token = mixins.get_token_from_request(request)
             payload = mixins.get_payload_from_token(token)
