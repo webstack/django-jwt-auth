@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import sys
+
 from setuptools import setup
 
 if sys.argv[-1] == "publish":
@@ -45,5 +46,5 @@ setup(
         "Programming Language :: Python :: 3",
         "Topic :: Internet :: WWW/HTTP",
     ],
-    install_requires=["Django>=2.0", "PyJWT>=2.0.0"],
+    install_requires=["Django>=3.0", "PyJWT>=2.0.0"],
 )

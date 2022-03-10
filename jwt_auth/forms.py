@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.signals import user_logged_in
 from django.core.exceptions import ObjectDoesNotExist
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from jwt_auth import settings as jwt_auth_settings
 from jwt_auth.core import User
 from jwt_auth.utils import jwt_get_user_id_from_payload_handler

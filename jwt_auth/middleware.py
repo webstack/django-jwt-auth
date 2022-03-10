@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.middleware import get_user
 from django.http import JsonResponse
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from jwt_auth import settings as jwt_auth_settings, exceptions, mixins
 
 logger = logging.getLogger(__name__)

@@ -1,7 +1,7 @@
 import jwt
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_exempt
 from jwt_auth import exceptions, settings
 from jwt_auth.core import User

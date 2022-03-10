@@ -17,7 +17,7 @@ New features from original code:
 
 - refresh token
 - provides 2 middlewares
-- Django 2.0+
+- Django 3.0+
 - better coverage and packaging
 
 ## Installation
